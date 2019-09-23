@@ -58,4 +58,28 @@ public class TransactionProcessorTest
         assertEquals(expectedAmount, amount);
     }
 
+
+    @Test
+    public void shouldNotConsiderTransactionOutsideTime()
+    {
+        List<Transaction> transactions = new ArrayList<Transaction>();
+        Transaction transaction = new Transaction();
+        transaction.fromStringCsv("TX10001, ACC334455, ACC998877, 20/10/2018 12:47:55, 25.00, PAYMENT");
+        transactions.add(transaction);
+        transaction = new Transaction();
+        transaction.fromStringCsv("TX10004, ACC334455, ACC998877, 20/10/2018 19:45:00, 25.00, PAYMENT");
+        transactions.add(transaction);
+
+        TransactionProcessor processor = new TransactionProcessor(transactions);
+        IResult result = processor.calculateRelativeAccountBalance("ACC998877", "20/10/2018 12:00:00", "20/10/2018 19:00:00");
+        Integer count = result.getNumberOfTransactions();
+        Integer expected = new Integer(1);
+        assertEquals(expected, count);
+
+
+        Float amount = result.getAmount();
+        Float expectedAmount = new Float(25.0);
+        assertEquals(expectedAmount, amount);
+    }
+
 }

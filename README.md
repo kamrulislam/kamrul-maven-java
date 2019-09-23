@@ -8,3 +8,6 @@ This a maven java project. I have used [the plain project](https://github.com/ka
 - Added unit tests. 
   
 
+## Improvements
+
+- Add more unit tests covering input reader.

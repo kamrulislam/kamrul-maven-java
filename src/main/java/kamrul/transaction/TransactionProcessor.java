@@ -16,12 +16,12 @@ import kamrul.transaction.TransactionType;
 public class TransactionProcessor implements IProcess {
     private List<Transaction> transactions;
     private Map<String, List<Transaction>> transactionsMapForAccount;
-    private Map<String, Transaction> transactionsMapForReversal;
+    private Map<String, Boolean> transactionsMapForReversal;
 
     public TransactionProcessor(List<Transaction> transactions) {
         this.transactions = transactions;
         this.transactionsMapForAccount = new HashMap<String, List<Transaction>>();
-        this.transactionsMapForReversal = new HashMap<String,Transaction>();
+        this.transactionsMapForReversal = new HashMap<String, Boolean>();
         this.preProcessTransactions(); 
     }
 
@@ -47,6 +47,11 @@ public class TransactionProcessor implements IProcess {
                 totalTransactions += 1;
                 totalAmount += getAmountForAccount(transaction, accountId);
             }
+            // no need to go further if to transaction created after the toDate
+            // NOTE: this is possible as the given transactions will be sorted
+            if (transaction.getCreateAt().compareTo(toDate) > 0) {
+                break;
+            }
         }
 
         return new Balance(totalTransactions, totalAmount);
@@ -60,11 +65,14 @@ public class TransactionProcessor implements IProcess {
         transactions.forEach(transaction -> {
             String fromAccount = transaction.getFromAccountId();
             String toAccount = transaction.getToAccountId();
+            // no need to do anything if both from and to accounts are same
             if (fromAccount.equals(toAccount)) {
                 return;
             }
+            // putting reversal on a separate list.
+            // NOTE: considering the whole transaction has been reversed
             if(transaction.getTransactionType() == TransactionType.REVERSAL) {
-                this.transactionsMapForReversal.put(transaction.getRelatedTransaction(), transaction);
+                this.transactionsMapForReversal.put(transaction.getRelatedTransaction(), true);
                 return;
             }
             if (!transactionsMapForAccount.containsKey(fromAccount)) {

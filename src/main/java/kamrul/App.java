@@ -16,7 +16,9 @@ public class App
 {
     public static void main( String[] args )
     {
-
+        System.out.println("==========================================================");
+        System.out.println("Processing sample `input.csv` placed in the root directory");
+        System.out.println("==========================================================");
         //input processing
         ICsvReader csvReader = new FileReader("./input.csv");
         List<String> inputFileData = csvReader.getDataFromCsv();
@@ -32,8 +34,22 @@ public class App
                 "20/10/2018 12:00:00",
                 "20/10/2018 19:00:00"
         );
-
+        System.out.println("");
+        System.out.println("TEST 1: AccountID: ACC334455, from: 20/10/2018 12:00:00, to: 20/10/2018 19:00:00");
         System.out.println("Relative balance for the period is: " + result.getAmount());
         System.out.println("Number of transactions included is: " + result.getNumberOfTransactions());
+
+        //process 2
+
+        result = processor.calculateRelativeAccountBalance(
+                "ACC778899",
+                "20/10/2018 12:00:00",
+                "20/10/2018 19:00:00"
+        );
+        System.out.println("");
+        System.out.println("TEST 1: AccountID: ACC778899, from: 20/10/2018 12:00:00, to: 20/10/2018 19:00:00");
+        System.out.println("Relative balance for the period is: " + result.getAmount());
+        System.out.println("Number of transactions included is: " + result.getNumberOfTransactions());
+
     }
 }

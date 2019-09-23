@@ -14,8 +14,7 @@ import java.util.List;
 
 public class App
 {
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) {
         System.out.println("==========================================================");
         System.out.println("Processing sample `input.csv` placed in the root directory");
         System.out.println("==========================================================");

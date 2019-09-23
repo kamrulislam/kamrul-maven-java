@@ -29,6 +29,10 @@ OS name: "mac os x", version: "10.13.6", arch: "x86_64", family: "mac"
 mvn clean package
 java -cp target/kamrul-maven-app-1.0-SNAPSHOT.jar kamrul.App
 ```
+or simply
+```
+./run.sh
+```
 - to run test using following command
 ```
 mvn test
